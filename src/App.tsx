@@ -1,25 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.sass';
+import { HeaderPanel, DropDown, NavBar, NavButton, SidePanel, NavList, ContentLayout, Table } from './components/components';
+import { homeIcon, arrowBackIcon } from './assets/icons';
 
 function App() {
+  const list = [
+    'По проекту',
+    'Объекты',
+    'РД',
+    'МТО',
+    'СМР',
+    'График',
+    'МиМ',
+    'Рабочие',
+    'Капвложения',
+    'Бюджет',
+    'Финансирование',
+    'Панорамы',
+    'Камеры',
+    'Поручения',
+    'Контрагенты',
+  ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <HeaderPanel>
+        <NavButton icon={homeIcon} />
+        <NavButton icon={arrowBackIcon} />
+        <NavBar navList={['Просмотр', 'Управление']} />
+      </HeaderPanel>
+      <SidePanel>
+        <HeaderPanel>
+          <DropDown title="Название проекта" caption="Аббревиатура" />
+        </HeaderPanel>
+        <NavList itemsList={list} />
+      </SidePanel>
+      <ContentLayout>
+        <HeaderPanel title='Строительно-монтажные работы' />
+        <Table />
+      </ContentLayout>
+    </>
   );
 }
 
