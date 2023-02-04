@@ -1,3 +1,5 @@
-export type NavButtonProps = {
-    icon: string
+interface INavButtonProps {
+  icon: string;
 }
+
+export type { INavButtonProps };

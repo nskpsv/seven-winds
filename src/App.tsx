@@ -1,6 +1,14 @@
 import './App.sass';
-import { HeaderPanel, DropDown, NavBar, NavButton, SidePanel, NavList, ContentLayout, Table } from './components/components';
 import { homeIcon, arrowBackIcon } from './assets/icons';
+import { ContentLayout } from './components/content-layout';
+import { DropDown } from './components/drop-down';
+import { HeaderPanel } from './components/header-panel';
+import { NavBar } from './components/nav-bar';
+import { NavButton } from './components/nav-button';
+import { NavList } from './components/nav-list';
+import { SidePanel } from './components/side-panel';
+import { Table } from './components/table';
+import { TableProvider } from './context/table-context/table-context';
 
 function App() {
   const list = [
@@ -35,8 +43,10 @@ function App() {
         <NavList itemsList={list} />
       </SidePanel>
       <ContentLayout>
-        <HeaderPanel title='Строительно-монтажные работы' />
-        <Table />
+        <HeaderPanel title="Строительно-монтажные работы" />
+        <TableProvider>
+          <Table />
+        </TableProvider>
       </ContentLayout>
     </>
   );

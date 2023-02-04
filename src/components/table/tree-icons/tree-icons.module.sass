@@ -1,0 +1,66 @@
+@import ../../../sass/_colors
+$max-block-width: 56px
+$min-block-width: 28px
+$block-height: 28px
+$level-line-height: 60px
+$level-line-width: 12px
+
+.container
+    display: flex
+    height: 28px
+
+.level
+    width: 20px
+    height: 24px
+    overflow: visible
+    position: relative
+
+.firstLevel
+    width: $level-line-width
+    height: $level-line-height
+    border-left: 1px solid $tree-line-color
+    border-bottom: 1px solid $tree-line-color
+    position: absolute
+    bottom: 10px
+    left: 13px
+    z-index: 0
+
+.nLevel
+    width: $level-line-width
+    height: $level-line-height
+    border-left: 1px solid $tree-line-color
+    position: absolute
+    bottom: 10px
+    left: 13px
+
+.icons
+    display: flex
+    align-items: center
+    gap: 2px
+    padding: 2px
+    border-radius: 6px
+
+    &:hover
+        background-color: $line-color
+
+        .hiddenIcon
+            visibility: visible
+
+        .iconImage
+            background-color: $line-color
+
+.icon
+    cursor: pointer
+    padding: 4px
+    display: flex
+    align-items: center
+    z-index: 1
+
+.iconImage
+    width: 16px
+    height: 16px
+    background-color: $background-primary
+
+.hiddenIcon
+    visibility: hidden
+    

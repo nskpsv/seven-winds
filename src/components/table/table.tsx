@@ -1,41 +1,37 @@
-import { createContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CleanRow } from '../../classes/row-classes';
+import { TableContext } from '../../context/table-context/table-context';
 import { getRows } from '../../service/row-api';
 import { TableRow } from './table-row/table-row';
-import { RowListEntity, Row } from './table-row/table-row.types';
+import { IRowListEntity } from './table-row/table-row.types';
 import styles from './table.module.sass';
-import { createEntitiesObject } from './table.service';
-import { EntitiesObject, ITableContext } from './table.types';
 
 export function Table() {
-  const [rows, setRows] = useState<RowListEntity[]>([]);
-  const [entities, setEntities] = useState<EntitiesObject>({});
   const [isFetching, setIsFetching] = useState<boolean>(true);
+  const { setRows, rows } = useContext(TableContext);
 
-  function addRow(parentID: number) {
-    entities[parentID].child!.push(new Row(parentID))
-  }
-
-  const TableContext = createContext<ITableContext>({ addRow });
-
-  const TableProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
-    return (
-      <TableContext.Provider value={{ addRow }}>
-        {children}
-      </TableContext.Provider>
-    );
-  };
-
-  function printRows(data: RowListEntity[]) {
+  function printRows(data: IRowListEntity[]) {
     let level = 0;
     let rows: JSX.Element[] = [];
 
-    (function unroll(data: RowListEntity[]) {
-      data.forEach((row) => {
-        rows.push(<TableRow data={row} level={level} />);
+    (function unroll(data: IRowListEntity[], path?: number[]) {
+      data.forEach((row, i) => {
+        const curPath = path ? [...path] : [];
+        curPath.push(i);
 
-        if (row.child?.length !== undefined) {
-          level += 1;
-          rows.concat(unroll(row.child));
+        rows.push(
+          <TableRow
+            data={row}
+            level={level}
+            path={[...curPath]}
+            key={row.id || path?.toString()}
+          />,
+        );
+
+        if (!!row.child && row.child.length > 0) {
+          level++;
+          rows.concat(unroll(row.child, [...curPath]));
+          level--;
         }
       });
       return rows;
@@ -47,7 +43,6 @@ export function Table() {
   useEffect(() => {
     getRows().then((data) => {
       setRows(data);
-      setEntities(createEntitiesObject(data));
       setIsFetching((current) => !current);
     });
   }, []);
@@ -60,26 +55,24 @@ export function Table() {
     );
 
   return (
-    <TableProvider>
-      <table className={styles.table}>
-        <thead>
-          <tr className={styles.table_header}>
-            <th style={{ flexBasis: '6.7%' }}>Уровень</th>
-            <th style={{ flexBasis: '12%' }}>Наименование работ</th>
-            <th style={{ flexBasis: '12%' }}>Основная з/п</th>
-            <th style={{ flexBasis: '12%' }}>Оборудование</th>
-            <th style={{ flexBasis: '12%' }}>Накладные расходы</th>
-            <th style={{ flexBasis: '12%' }}>Сметная прибыль</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length > 0 ? (
-            printRows(rows)
-          ) : (
-            <TableRow data={new Row(null)} level={0} />
-          )}
-        </tbody>
-      </table>
-    </TableProvider>
+    <table className={styles.table}>
+      <thead>
+        <tr className={styles.table_header}>
+          <th>Уровень</th>
+          <th>Наименование работ</th>
+          <th>Основная з/п</th>
+          <th>Оборудование</th>
+          <th>Накладные расходы</th>
+          <th>Сметная прибыль</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.length ? (
+          printRows(rows)
+        ) : (
+          <TableRow data={new CleanRow(null)} level={0} path={[0]} />
+        )}
+      </tbody>
+    </table>
   );
 }

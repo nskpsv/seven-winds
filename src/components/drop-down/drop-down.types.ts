@@ -1,8 +1,6 @@
-type DropDownProps = {
-    title: string;
-    caption?: string;
+interface IDropDownProps {
+  title: string;
+  caption?: string;
 }
 
-export type {
-    DropDownProps,
-}
+export type { IDropDownProps };

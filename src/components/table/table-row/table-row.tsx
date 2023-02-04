@@ -1,32 +1,86 @@
-import styles from '../table.module.sass';
-import React, { useEffect, useState } from 'react';
+import styles from './table-row.module.sass';
+import React, { useContext, useEffect, useState } from 'react';
+import { IRowListEntity, TableRowProps } from './table-row.types';
+import { TreeIcons } from '../index';
+import { TableContext } from '../../../context/table-context/table-context';
+import { InputField } from '../../input-field';
+import { UpdateRowRequestModel } from '../../../classes/row-classes';
+import { createRow, deleteRow, updateRow } from '../../../service/row-api';
 import {
-  CreateRowEntity,
-  RowListEntity,
-  TableRowProps,
-} from './table-row.types';
-import { TreeIcons } from '../../tree-icons/tree-icons';
+  addRowToState,
+  createEntitiesObject,
+  deleteRowFromState,
+  updateMap,
+} from '../table.service';
 
-export function TableRow({ data, level }: TableRowProps) {
+export function TableRow({ data, level, path }: TableRowProps) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [state, setState] = useState<RowListEntity | CreateRowEntity>(data);
+  const [state, setState] = useState<IRowListEntity>(data);
+  const { rows, setRows } = useContext(TableContext);
 
   function updateState(e: React.ChangeEvent<HTMLInputElement>) {
-    setState((current) => ({ ...current, [e.target.name]: e.target.value }));
+    setState((current) => ({
+      ...current,
+      [e.target.name]:
+        e.target.name === 'rowName' ? e.target.value : Number(e.target.value),
+    }));
   }
 
   function toggleIsEdit() {
     setIsEdit((current) => !current);
   }
 
-  function doubleClickHandler(e: React.MouseEvent<HTMLTableRowElement>) {
+  function handlerDoubleClick() {
     if (!isEdit) toggleIsEdit();
   }
 
   function handlerEnterPress(e: React.KeyboardEvent<HTMLTableRowElement>) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && state.rowName.length > 0) {
+      const updatedRows = [...rows];
+      const map = createEntitiesObject(updatedRows);
+
+      if (state.id) {
+        updateRow(new UpdateRowRequestModel(state), state.id).then(
+          (response) => {
+            updateMap(map, response);
+          },
+        );
+      }
+
+      if (state.parentId) {
+        createRow(state).then((response) => {
+          updateMap(map, response);
+        });
+      }
+
+      setRows(updatedRows);
       toggleIsEdit();
     }
+  }
+
+  function handlerDelete(path: number[]) {
+    const updatedRows = [...rows];
+
+    if (data.id) {
+      deleteRow(data.id).then((response) => {
+        deleteRowFromState(updatedRows, path);
+
+        if (response.changed.length > 0) {
+          const map = createEntitiesObject(updatedRows);
+          response.changed.forEach((row) => (map[row.id!.toString()] = row));
+        }
+      });
+    } else {
+      deleteRowFromState(updatedRows, path);
+    }
+    setRows(updatedRows);
+  }
+
+  function handlerAdd(path: number[]) {
+    const updatedRows = [...rows];
+
+    addRowToState(updatedRows, path);
+    setRows(updatedRows);
   }
 
   useEffect(() => {
@@ -36,59 +90,82 @@ export function TableRow({ data, level }: TableRowProps) {
   return isEdit ? (
     <tr
       className={styles.table_row}
-      onDoubleClick={doubleClickHandler}
+      onDoubleClick={handlerDoubleClick}
       onKeyDown={handlerEnterPress}
     >
-      <td width="6.7%">
-        <TreeIcons isEnable={!isEdit} />
+      <td>
+        <TreeIcons
+          enableAdd={false}
+          level={level}
+          onAdd={() => handlerAdd(path)}
+          onDelete={() => {
+            handlerDelete(path);
+          }}
+        />
       </td>
-      <td className={styles.td__edit}>
-        <input
+      <td className={`${styles.tdEdit} ${styles.tdEditRo}`}>
+        <InputField
           onChange={updateState}
           value={state.rowName}
           name="rowName"
+          type="text"
           autoFocus
         />
       </td>
-      <td className={styles.td__edit} width="12%">
-        <input onChange={updateState} value={state.salary} name="salary" />
+      <td className={styles.tdEdit} width={200}>
+        <InputField
+          onChange={updateState}
+          value={state.salary}
+          name="salary"
+          type="number"
+        />
       </td>
-      <td className={styles.td__edit} width="12%">
-        <input
+      <td className={styles.tdEdit} width={200}>
+        <InputField
           onChange={updateState}
           value={state.equipmentCosts}
           name="equipmentCosts"
+          type="number"
         />
       </td>
-      <td className={styles.td__edit} width="12%">
-        <input
+      <td className={styles.tdEdit} width={200}>
+        <InputField
           onChange={updateState}
           value={state.overheads}
           name="overheads"
+          type="number"
         />
       </td>
-      <td className={styles.td__edit} width="12%">
-        <input
+      <td className={styles.tdEdit} width={200}>
+        <InputField
           onChange={updateState}
           value={state.estimatedProfit}
           name="estimatedProfit"
+          type="number"
         />
       </td>
     </tr>
   ) : (
     <tr
-      className={styles.table_row}
-      onDoubleClick={doubleClickHandler}
+      className={styles.tableRow}
+      onDoubleClick={handlerDoubleClick}
       onKeyDown={handlerEnterPress}
     >
-      <td width="6.7%">
-        <TreeIcons isEnable={!isEdit} />
+      <td>
+        <TreeIcons
+          enableAdd
+          level={level}
+          onAdd={() => handlerAdd(path)}
+          onDelete={() => {
+            handlerDelete(path);
+          }}
+        />
       </td>
       <td>{state.rowName}</td>
-      <td width="12%">{state.salary}</td>
-      <td width="12%">{state.equipmentCosts}</td>
-      <td width="12%">{state.overheads}</td>
-      <td width="12%">{state.estimatedProfit}</td>
+      <td width={200}>{state.salary}</td>
+      <td width={200}>{state.equipmentCosts}</td>
+      <td width={200}>{state.overheads}</td>
+      <td width={200}>{state.estimatedProfit}</td>
     </tr>
   );
 }

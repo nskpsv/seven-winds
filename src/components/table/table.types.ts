@@ -1,13 +1,7 @@
-import { RowListEntity } from "./table-row/table-row.types";
+import { IRowListEntity } from './table-row/table-row.types';
 
-type TableProps = {
-  rows: RowListEntity[];
-};
+interface IEntitiesObject {
+  [key: string]: IRowListEntity;
+}
 
-type EntitiesObject = { [key: string]: RowListEntity };
-
-interface ITableContext {
-    addRow: (parentID: number) => void;
-  };
-
-export type { TableProps, ITableContext, EntitiesObject };
+export type { IEntitiesObject };

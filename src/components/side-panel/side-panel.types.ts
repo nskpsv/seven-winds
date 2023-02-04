@@ -1,6 +1,8 @@
-import React from "react"
+import React from 'react';
 
-export type PanelProps = {
-    children?: React.ReactNode;
-    position?: 'left' | 'right';
+interface IPanelProps {
+  children?: React.ReactNode;
+  position?: 'left' | 'right';
 }
+
+export type { IPanelProps };

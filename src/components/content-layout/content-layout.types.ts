@@ -1,7 +1,7 @@
-type LayoutProps = {
+interface ILayoutProps {
     children: React.ReactNode
 }
 
 export type {
-    LayoutProps,
+    ILayoutProps,
 }

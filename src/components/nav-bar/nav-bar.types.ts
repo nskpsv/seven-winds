@@ -1,7 +1,5 @@
-type NavigationProps = {
-    navList: string[]
+interface INavigationProps {
+  navList: string[];
 }
 
-export type {
-    NavigationProps,
-}
+export type { INavigationProps };

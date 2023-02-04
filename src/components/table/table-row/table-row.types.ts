@@ -1,48 +1,40 @@
-interface UpdateRowEntity {
-  equipmentCosts: number;
-  estimatedProfit: number;
+interface IUpdateRowEntity extends IRowState {
   machineOperatorSalary: number;
   mainCosts: number;
   materials: number;
   mimExploitation: number;
-  overheads: number;
-  rowName: string;
-  salary: number;
   supportCosts: number;
 }
 
-interface CreateRowEntity extends UpdateRowEntity {
-  parentId: number | null;
-}
-
-interface RowListEntity extends UpdateRowEntity {
+interface IRowListEntity extends IUpdateRowEntity {
+  parentId?: number | null;
   id?: number;
   total?: number;
-  child?: Array<RowListEntity | CreateRowEntity>;
+  child?: IRowListEntity[];
 }
 
-type TableRowProps = {
-  data: RowListEntity | CreateRowEntity;
+interface TableRowProps {
+  data: IRowListEntity;
   level: number;
-};
-
-class Row implements CreateRowEntity {
-  equipmentCosts = 0;
-  estimatedProfit = 0;
-  machineOperatorSalary = 0;
-  mainCosts = 0;
-  materials = 0;
-  mimExploitation = 0;
-  overheads = 0;
-  rowName = '';
-  salary = 0;
-  supportCosts = 0;
-  parentId;
-
-  constructor(parentId: number | null) {
-    this.parentId = parentId;
-  }
+  path: number[];
 }
 
-export type { TableRowProps, RowListEntity, CreateRowEntity };
-export { Row };
+interface IRowState {
+  rowName: string;
+  salary: number;
+  equipmentCosts: number;
+  overheads: number;
+  estimatedProfit: number;
+}
+
+interface IUpdateRowsResponse {
+  current: IRowListEntity;
+  changed: IRowListEntity[];
+}
+
+interface IDeleteRowResponse {
+  current: null;
+  changed: IRowListEntity[];
+}
+
+export type { TableRowProps, IRowListEntity, IUpdateRowEntity, IRowState, IUpdateRowsResponse, IDeleteRowResponse };

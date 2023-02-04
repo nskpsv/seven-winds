@@ -1,7 +1,7 @@
 import styles from './header-panel.module.sass';
-import { HeaderProps } from './header-panel.types';
+import { IHeaderProps } from './header-panel.types';
 
-export function HeaderPanel({ title, children }: HeaderProps) {
+export function HeaderPanel({ title, children }: IHeaderProps) {
   return (
     <div className={styles.container}>
       {title !== undefined && (
@@ -9,10 +9,9 @@ export function HeaderPanel({ title, children }: HeaderProps) {
           <span className={styles.title_text}>{title}</span>
         </div>
       )}
-      {children !== undefined && 
-      <div className={styles.children}>
-        {children}
-      </div>}
+      {children !== undefined && (
+        <div className={styles.children}>{children}</div>
+      )}
     </div>
   );
 }
