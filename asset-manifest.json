@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/seven-windsg/static/css/main.3cbc682c.css",
+    "main.js": "/seven-windsg/static/js/main.ae3e1113.js",
+    "static/media/trash.svg": "/seven-windsg/static/media/trash.14eb749d6e247b1f14acb3bc4657de15.svg",
+    "index.html": "/seven-windsg/index.html",
+    "static/media/document.svg": "/seven-windsg/static/media/document.75774930b8d14388d84883b0a647f8e3.svg",
+    "static/media/item.svg": "/seven-windsg/static/media/item.f382575b9a0c17a56e877da560b8625a.svg",
+    "static/media/home.svg": "/seven-windsg/static/media/home.11f97507b87f3ac10b1a93209dd21433.svg",
+    "static/media/arrow-back.svg": "/seven-windsg/static/media/arrow-back.937d6be56823fddadf07aec5d199d7d2.svg",
+    "main.3cbc682c.css.map": "/seven-windsg/static/css/main.3cbc682c.css.map",
+    "main.ae3e1113.js.map": "/seven-windsg/static/js/main.ae3e1113.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3cbc682c.css",
+    "static/js/main.ae3e1113.js"
+  ]
+}
