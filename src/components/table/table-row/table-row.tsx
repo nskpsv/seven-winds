@@ -89,7 +89,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
 
   return isEdit ? (
     <tr
-      className={styles.table_row}
+      className={`${styles.tableRow} ${styles.tableRowEdit}`}
       onDoubleClick={handlerDoubleClick}
       onKeyDown={handlerEnterPress}
     >
@@ -103,7 +103,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           }}
         />
       </td>
-      <td className={`${styles.tdEdit} ${styles.tdEditRo}`}>
+      <td width="757px">
         <InputField
           onChange={updateState}
           value={state.rowName}
@@ -112,7 +112,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           autoFocus
         />
       </td>
-      <td className={styles.tdEdit} width={200}>
+      <td width={200}>
         <InputField
           onChange={updateState}
           value={state.salary}
@@ -120,7 +120,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           type="number"
         />
       </td>
-      <td className={styles.tdEdit} width={200}>
+      <td width={200}>
         <InputField
           onChange={updateState}
           value={state.equipmentCosts}
@@ -128,7 +128,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           type="number"
         />
       </td>
-      <td className={styles.tdEdit} width={200}>
+      <td width={200}>
         <InputField
           onChange={updateState}
           value={state.overheads}
@@ -136,7 +136,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           type="number"
         />
       </td>
-      <td className={styles.tdEdit} width={200}>
+      <td width={200}>
         <InputField
           onChange={updateState}
           value={state.estimatedProfit}
@@ -151,7 +151,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
       onDoubleClick={handlerDoubleClick}
       onKeyDown={handlerEnterPress}
     >
-      <td>
+      <td className={styles.tableRow}>
         <TreeIcons
           enableAdd
           level={level}
@@ -161,7 +161,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
           }}
         />
       </td>
-      <td>{state.rowName}</td>
+      <td width="757px">{state.rowName}</td>
       <td width={200}>{state.salary}</td>
       <td width={200}>{state.equipmentCosts}</td>
       <td width={200}>{state.overheads}</td>
