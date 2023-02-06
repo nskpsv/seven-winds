@@ -35,7 +35,7 @@ export function TableRow({ data, level, path }: TableRowProps) {
   }
 
   function handlerEnterPress(e: React.KeyboardEvent<HTMLTableRowElement>) {
-    if (e.key === 'Enter' && state.rowName.length > 0) {
+    if (e.key === 'Enter' && state.rowName.trim()) {
       const updatedRows = [...rows];
       const map = createEntitiesObject(updatedRows);
 
